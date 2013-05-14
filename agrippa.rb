@@ -23,8 +23,8 @@ if cpselect == "1"
  # sak = gets.gsub("\n","")
   ec2 = AWS::EC2.new(
     # :access_key_id => akid,
-    :access_key_id => 'AKIAIAGD5BGI2XTK5XIA',
-    :secret_access_key => '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')
+    :access_key_id => '',
+    :secret_access_key => '')
     # :secret_access_key => sak)
 #  puts ec2.security_group.ip_permissions
 puts ec2.network_acls
