@@ -220,8 +220,8 @@ if cpselect == "1"
 
   #ec2.security_groups[rgroup]
   
-
-
+#  puts ec2.security_group.ip_permissions
+puts ec2.network_acls
 
 elsif cpselect == "2"
   puts "Unfortunately #{cpselect} is not available at this time..."
