@@ -1,14 +1,34 @@
-##Agrippa
+##Coromandel
 
 ###About
-Marcus Vipsanius Agrippa was hailed throughout Rome for quelling a Gallic rebellion, and became famous for refusing to have a triumph help for him. Agrippa participated in minor campaigns in 34 and 33 BC, before leading massive projects to beautify Rome, ordering for the large aqueduct Aqua Marcia to be renovated, and cleaned out the sewers and plumbing systems. This later prompted Augustus to state that he had “found a city of brick and left it a city of marble.” In his later years Agrippa charted geography, carried out surveys of the empire’s citizens, and helped to secure the new empire government system and added his own ideas to how it should be maintained. (<a href="http://listverse.com/2012/01/19/7-greatest-roman-generals/" target="new">src</a>)
+A Coromandel Screen is a wooden folding screen coated in dark lacquer that is carved before being painted with gold or varied colors. Some may be decorated with precious stones. (<a href="http://quezi.com/3679" target="new">Source</a>)
 
-Agrippa, the tool, was designed to isolate a cloud instance for analysis so that it may be investigated without fear of introducing addtional external artifacts not explicitly introduced by the responder and their tools.
+Coromandel, the tool, was designed to isolate an individual cloud server instance for analysis so that it may be investigated without fear of introducing addtional  artifacts not explicitly introduced by the responder and their tools.
 
 ###Usage
+<pre><code>
+$ ruby coromandel.rb
 
-Coming soon...
+                                 _     _ 
+ ___ ___ ___ ___ _____ ___ ___ _| |___| |
+|  _| . |  _| . |     | .'|   | . | -_| |
+|___|___|_| |___|_|_|_|__,|_|_|___|___|_|
 
+ Created by: Andrew Hay / @andrewsmhay 
+ http://github.com/andrewsmhay/coromandel
+
+Please specify the cloud provider from the list below
+
+(1) Amazon EC2
+(2) GoGrid (not available)
+(3) OpenStack (not available)
+(4) Rackspace Cloud (not available)
+(5) CloudStack (not available)
+(6) Windows Azure (not available)
+(7) Google Compute Engine (not available)
+
+Please select the cloud provider ID: 
+</code></pre>
 ###Contact
 
 To provide any feedback or ask any questions please reach out to Andrew Hay on Twitter at <a href="http://twitter.com/andrewsmhay" target="new">@andrewsmhay</a>.
