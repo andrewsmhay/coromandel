@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'aws-sdk'
-require './lib/cloudkeys.rb'
+require '.lib/cloudkeys.rb'
 
 # List of cloud providers
 keymaster = Cloudkeys.new
@@ -51,7 +51,7 @@ bigacl_list = ''
 raycount = 0
 makeacl = 0
 
-# Cloud provider                                      
+                                    
 puts "                                 _     _ "
 puts " ___ ___ ___ ___ _____ ___ ___ _| |___| |"
 puts "|  _| . |  _| . |     | .'|   | . | -_| |"
@@ -59,7 +59,7 @@ puts "|___|___|_| |___|_|_|_|__,|_|_|___|___|_|"
 puts "\n"
 puts " Created by: Andrew Hay / @andrewsmhay "
 puts " http://github.com/Agrippa"
-                                                                                     
+# Cloud provider                                                                                       
 puts "\n"
 puts "Please specify the cloud provider from the list below"
 puts "\n"
@@ -100,12 +100,11 @@ if cpselect == "1"
 
   #Figure out the instance
   sel_inst = sec_instances[iso_inst]
-  #puts sel_inst
+  
   #Figure out the VPC ID for that instance
   ec2.instances.filter('instance-id', sel_inst).each do |veepeecee|
     thevpcid = veepeecee.vpc_id
   end
-  #puts thevpcid
 
 #### CASE NAME, IP ADDRESSES, PORTS, AND ICMP ####
   puts "\n"
@@ -116,53 +115,44 @@ if cpselect == "1"
   print "Enter a unique identifier for this case or incident: "
   analyst_case = gets.gsub("\n","")
   puts "\n"
-  #puts analyst_case
 
   puts "\n"
-  print "Enter the IP address of your analysis station(s) (e.g. 1.2.3.4, 5.6.7.8, etc.): "
+  print "Enter the IP address(es) of your analysis station(s) (e.g. 1.2.3.4, 5.6.7.8, etc.): "
   analyst_ips = gets.gsub("\n","")
-  puts analyst_ips
   analyst_ips.split(", ").each do |startmeup|
-    ip_list << startmeup
+    ip_list << startmeup + "/32"
   end
   
  
   puts "\n"
-  print "Which TCP ports do you wish to open (e.g. 80, 22, etc.): "
+  print "Which TCP port(s) do you wish to open (e.g. 80, 22, etc.): "
   proto_port = gets.gsub("\n","")
   proto_port.split(", ").each do |portmeup|
-    port_proto_list << portmeup
+    port_proto_list << portmeup.to_i
   end
-  
+
   puts "\n"
   print "Allow ICMP from analyst station to the target? [Y/N]: "
   iseempee = gets.gsub("\n","")
   puts "\n"
   puts "===#{analyst_case}==="
-  if iseempee =~ /y/i  
-    puts "#{analyst_ips} will be allowed to communicate with #{sec_pub_dns[iso_inst]} on ports #{proto_port} and via ICMP"
-  else
-    puts "#{analyst_ips} will be allowed to communicate with #{sec_pub_dns[iso_inst]} on ports #{proto_port}"
-  end
 #### END OF CASE NAME, IP ADDRESSES, PORTS, AND ICMP ####
 
-
-
+  puts "#{analyst_ips} will be allowed to communicate with #{sec_pub_dns[iso_inst]} on ports #{proto_port}."
 ## Create group using case ID for the VPC
   vpc_sg = ec2.security_groups.create(analyst_case, :vpc_id => thevpcid)
-
+  argh = 0
 ##   Allow inbound IP addresses as defined in ip_list array on ports in port_proto_list  
-  bigacl_list = ip_list.map{|e| port_proto_list.map{|i| "#{e},#{i}"}}.flatten
-
-=begin
-  #raycount = ip_list.count * port_proto_list.count
-  vpc_sg.authorize_ingress(insertip, :protocol => :any)  
-  vpc_sg.egress_ip_permissions.each do |permission|
-   
+  port_proto_list.each do |pushipin|
+    ip_list.each {|ip| vpc_sg.authorize_ingress(:tcp, pushipin, ip) } 
   end
-=end
+  if iseempee =~ /y/i
+    ip_list.each do |pingy|
+    vpc_sg.allow_ping(pingy) # <- works: allows ICMP from the ip_list
+  end
+end
+  vpc_sg.revoke_egress('0.0.0.0/0') # <- works: removes all oubound access from the default group
 
-  puts bigacl_list.inspect
 ## ToDo:
 ##   'Disassociate address' with instance a.k.a sel_inst
 ##   'Allocate a new address' with instance a.k.a. sel_inst
@@ -187,10 +177,6 @@ elsif cpselect == "7"
 else
   puts "Unknown Cloud Provider..."
 end
-
-
-### Need to add an 'end of isolation report' that details exactly what was done 
-
 
 puts "\n"
 puts "Thank you for using Coromandel, happy forensicating!"
