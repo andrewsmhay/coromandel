@@ -50,6 +50,7 @@ thevpcid = ''
 bigacl_list = ''
 raycount = 0
 makeacl = 0
+header = "   Instance\tVPC ID\t\tPublic DNS\t\t\t\t\tPublic IP\tInternal DNS"
 
                                     
 puts "                                 _     _ "
@@ -58,7 +59,7 @@ puts "|  _| . |  _| . |     | .'|   | . | -_| |"
 puts "|___|___|_| |___|_|_|_|__,|_|_|___|___|_|"
 puts "\n"
 puts " Created by: Andrew Hay / @andrewsmhay "
-puts " http://github.com/Agrippa"
+puts " http://github.com/coromandel"
 # Cloud provider                                                                                       
 puts "\n"
 puts "Please specify the cloud provider from the list below"
@@ -87,7 +88,8 @@ if cpselect == "1"
     	sec_vpc_id << theinstances.vpc_id
     end
   end
-    puts "   Instance\tVPC ID\t\tPublic DNS\t\t\t\t\tPublic IP\tInternal DNS"
+    #puts "   Instance\tVPC ID\t\tPublic DNS\t\t\t\t\tPublic IP\tInternal DNS"
+    puts header
     sec_instances.each do |instprint|
       puts "#{lgc3}) #{sec_instances[lgc4]}\t#{sec_vpc_id[lgc4]}\t#{sec_pub_dns[lgc4]}\t#{sec_pub_ip[lgc4]}\t#{sec_priv_dns[lgc4]}"
       lgc3 += 1
@@ -122,7 +124,6 @@ if cpselect == "1"
   analyst_ips.split(", ").each do |startmeup|
     ip_list << startmeup + "/32"
   end
-  
  
   puts "\n"
   print "Which TCP port(s) do you wish to open (e.g. 80, 22, etc.): "
@@ -138,7 +139,8 @@ if cpselect == "1"
   puts "===#{analyst_case}==="
 #### END OF CASE NAME, IP ADDRESSES, PORTS, AND ICMP ####
 
-  puts "#{analyst_ips} will be allowed to communicate with #{sec_pub_dns[iso_inst]} on ports #{proto_port}."
+  puts "#{analyst_ips} will be allowed to communicate with #{sel_inst} on ports #{proto_port}."
+  puts "\n"
 ## Create group using case ID for the VPC
   vpc_sg = ec2.security_groups.create(analyst_case, :vpc_id => thevpcid)
   argh = 0
@@ -155,12 +157,47 @@ end
 
 ## ToDo:
 ##   'Disassociate address' with instance a.k.a sel_inst
+  eip = ec2.elastic_ips.create(:vpc => true)
+  ec2.instances[sel_inst].disassociate_elastic_ip
 ##   'Allocate a new address' with instance a.k.a. sel_inst
+  neweip = ec2.instances[sel_inst].associate_elastic_ip(eip)
+
+=begin  
+##
+##
 ##   Move instance to analyst_case group
+####THIS IS NOT YET WORKING
+  ec2.client.modify_instance_attribute(
+  :instance_id => sel_inst,
+  :groupSet => vpc_sg)
+####END - THIS IS NOT YET WORKING
+##
+##
+=end
+
 ##   Print message that shows everything completed
-
-
-
+  new_sec_instances = ''
+  new_sec_pub_ip = ''
+  new_sec_priv_ip = ''
+  new_sec_platform = ''
+  new_sec_pub_dns = ''
+  new_sec_priv_dns = ''
+  new_sec_vpc_id = ''
+  ec2.instances.filter('instance-id', sel_inst).each do |newstatus|
+      new_sec_instances = newstatus.id
+      new_sec_pub_ip = newstatus.public_ip_address
+      new_sec_priv_ip = newstatus.private_ip_address
+      new_sec_platform = newstatus.platform
+      new_sec_pub_dns = newstatus.public_dns_name
+      new_sec_priv_dns = newstatus.private_dns_name
+      new_sec_vpc_id = newstatus.vpc_id
+  end
+  puts "===New Instance Access Information==="
+  puts "\n"
+  puts "Instance Name\tVPC ID\tPublic DNS\tPublic IP\tInternal DNS"
+  puts "#{new_sec_instances}\t#{new_sec_vpc_id}\t#{new_sec_pub_dns}\t#{new_sec_pub_ip}\t#{new_sec_priv_dns}"
+  puts "\n"
+  puts "You may now access #{sel_inst} by connecting to #{new_sec_pub_ip} from #{analyst_ips}."
 
 elsif cpselect == "2"
   puts "Unfortunately #{cpselect} is not available at this time..."
