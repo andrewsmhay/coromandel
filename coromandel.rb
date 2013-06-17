@@ -6,13 +6,6 @@ require '.lib/cloudkeys.rb'
 keymaster = Cloudkeys.new
 accesskeyid = keymaster.ec2keyakid
 seckeyid = keymaster.ec2seckey
-sec_vpc_id = []
-sec_instances = []
-sec_priv_ip = []
-sec_pub_ip = []
-sec_platform = []
-sec_pub_dns = []
-sec_priv_dns = []
 ip_list = []
 port_proto_list = []
 lgc3 = 1
@@ -44,7 +37,14 @@ if cpselect == "1"
   ec2 = AWS::EC2.new(
     :access_key_id => "#{accesskeyid}",
     :secret_access_key => "#{seckeyid}")
-
+  
+  sec_vpc_id = []
+  sec_instances = []
+  sec_priv_ip = []
+  sec_pub_ip = []
+  sec_platform = []
+  sec_pub_dns = []
+  sec_priv_dns = []
   ec2.instances.filter('instance-state-name', 'running').each do |theinstances|
   	if theinstances.vpc_id != nil
     	sec_instances << theinstances.id
