@@ -16,7 +16,7 @@ class Cloudkeys
                   '(14) Joyent (not yet available)',
                   '(15) Oracle Cloud (not yet available)',
                   '(16) IBM SmartCloud Enterprise (not yet available)',
-                  '(17) VMware ESXi',
+                  '(17) VMware ESXi (not yet available)',
                   '(18) Kernel-based Virtual Machine (KVM - not yet available)',
                   '(19) Citirix XenServer (not yet available)']
   end
