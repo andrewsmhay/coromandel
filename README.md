@@ -42,7 +42,7 @@ Please select the cloud provider ID: 1
 
 You Selected Amazon EC2
 
-   Instance		VPC ID			Public DNS									Public IP	Internal DNS
+   Instance		VPC ID			Public DNS									Public IP		Internal DNS
 1) i-0f42be62	vpc-27cb4148	ec2-54-208-29-105.compute-1.amazonaws.com	54.208.29.105	ip-10-0-0-88.ec2.internal
 
 Please select the number of the instance to isolate: 1
