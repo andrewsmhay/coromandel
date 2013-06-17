@@ -77,6 +77,7 @@ if cpselect == "1"
     :access_key_id => "#{accesskeyid}",
     :secret_access_key => "#{seckeyid}")
 
+
   ec2.instances.filter('instance-state-name', 'running').each do |theinstances|
   	if theinstances.vpc_id != nil
     	sec_instances << theinstances.id
@@ -88,7 +89,7 @@ if cpselect == "1"
     	sec_vpc_id << theinstances.vpc_id
     end
   end
-    #puts "   Instance\tVPC ID\t\tPublic DNS\t\t\t\t\tPublic IP\tInternal DNS"
+
     puts header
     sec_instances.each do |instprint|
       puts "#{lgc3}) #{sec_instances[lgc4]}\t#{sec_vpc_id[lgc4]}\t#{sec_pub_dns[lgc4]}\t#{sec_pub_ip[lgc4]}\t#{sec_priv_dns[lgc4]}"
@@ -102,6 +103,7 @@ if cpselect == "1"
 
   #Figure out the instance
   sel_inst = sec_instances[iso_inst]
+  
   
   #Figure out the VPC ID for that instance
   ec2.instances.filter('instance-id', sel_inst).each do |veepeecee|
@@ -162,19 +164,11 @@ end
 ##   'Allocate a new address' with instance a.k.a. sel_inst
   neweip = ec2.instances[sel_inst].associate_elastic_ip(eip)
 
-=begin  
-##
-##
+## Figure out the network interface ID
+ ectest = ec2.instances[sel_inst].network_interfaces[0].id
 ##   Move instance to analyst_case group
-####THIS IS NOT YET WORKING
-  ec2.client.modify_instance_attribute(
-  :instance_id => sel_inst,
-  :groupSet => vpc_sg)
-####END - THIS IS NOT YET WORKING
-##
-##
-=end
-
+ testid = ec2.instances[sel_inst].network_interfaces[0].set_security_groups(vpc_sg)
+ 
 ##   Print message that shows everything completed
   new_sec_instances = ''
   new_sec_pub_ip = ''
