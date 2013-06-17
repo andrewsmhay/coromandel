@@ -7,15 +7,7 @@ keymaster = Cloudkeys.new
 accesskeyid = keymaster.ec2keyakid
 seckeyid = keymaster.ec2seckey
 sec_vpc_id = []
-sec_group = []
-sec_group_id = []
-sec_group_vpc = []
-sec_group_desc = []
-sec_port_prot = []
-sec_proto = []
-sec_port = []
 sec_instances = []
-sec_instances_grp = []
 sec_priv_ip = []
 sec_pub_ip = []
 sec_platform = []
@@ -23,36 +15,12 @@ sec_pub_dns = []
 sec_priv_dns = []
 ip_list = []
 port_proto_list = []
-lgc = 1
-lgc2 = 0
 lgc3 = 1
 lgc4 = 0
-rgroup = []
-permlista = []
-rulenum = 1
-useridval = []
-groupidval = []
-groupnameval = []
-cidrval = []
-ipprotval = []
-ipfromportval = []
-iptoportval = []
-ruleval = []
-rulevalnum = 1
-revokeit = []
-boom = 0
-boom2 = 0
-boom3 = 0
-boom4 = 0
-boomit = 0
-pow = 0
 thevpcid = ''
-bigacl_list = ''
-raycount = 0
-makeacl = 0
 header = "   Instance\tVPC ID\t\tPublic DNS\t\t\t\t\tPublic IP\tInternal DNS"
+header2 = "Instance Name\tVPC ID\tPublic DNS\tPublic IP\tInternal DNS"
 
-                                    
 puts "                                 _     _ "
 puts " ___ ___ ___ ___ _____ ___ ___ _| |___| |"
 puts "|  _| . |  _| . |     | .'|   | . | -_| |"
@@ -76,7 +44,6 @@ if cpselect == "1"
   ec2 = AWS::EC2.new(
     :access_key_id => "#{accesskeyid}",
     :secret_access_key => "#{seckeyid}")
-
 
   ec2.instances.filter('instance-state-name', 'running').each do |theinstances|
   	if theinstances.vpc_id != nil
@@ -157,7 +124,6 @@ if cpselect == "1"
 end
   vpc_sg.revoke_egress('0.0.0.0/0') # <- works: removes all oubound access from the default group
 
-## ToDo:
 ##   'Disassociate address' with instance a.k.a sel_inst
   eip = ec2.elastic_ips.create(:vpc => true)
   ec2.instances[sel_inst].disassociate_elastic_ip
@@ -188,7 +154,7 @@ end
   end
   puts "===New Instance Access Information==="
   puts "\n"
-  puts "Instance Name\tVPC ID\tPublic DNS\tPublic IP\tInternal DNS"
+  puts header2
   puts "#{new_sec_instances}\t#{new_sec_vpc_id}\t#{new_sec_pub_dns}\t#{new_sec_pub_ip}\t#{new_sec_priv_dns}"
   puts "\n"
   puts "You may now access #{sel_inst} by connecting to #{new_sec_pub_ip} from #{analyst_ips}."
