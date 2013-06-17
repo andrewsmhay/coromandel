@@ -42,8 +42,8 @@ Please select the cloud provider ID: 1
 
 You Selected Amazon EC2
 
-   Instance		VPC ID			Public DNS									Public IP		Internal DNS
-1) i-0f42be62	vpc-27cb4148	ec2-54-208-29-105.compute-1.amazonaws.com	54.208.29.105 	ip-10-0-0-88.ec2.internal
+   Instance		VPC ID			Public DNS									Public IP	Internal DNS
+1) i-0f42be62	vpc-27cb4148	ec2-54-208-29-105.compute-1.amazonaws.com	54.208.29.105	ip-10-0-0-88.ec2.internal
 
 Please select the number of the instance to isolate: 1
 
@@ -51,7 +51,6 @@ All traffic will be blocked to and from this instance.
 You will, however, be able to allow access from your analysis station(s).
 
 Enter a unique identifier for this case or incident: casejun172013
-
 
 Enter the IP address(es) of your analysis station(s) (e.g. 1.2.3.4, 5.6.7.8, etc.): 1.1.1.1, 2.2.2.2
 
