@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'aws-sdk'
-require '../devcloudkeys.rb'
+require '.lib/cloudkeys.rb'
 
 # List of cloud providers
 keymaster = Cloudkeys.new
